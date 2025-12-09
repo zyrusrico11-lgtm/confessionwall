@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confession Wall</title>
+<style>
+    body { font-family: Arial, sans-serif; background: #f4f4f9; padding: 20px; }
+    h1 { text-align: center; }
+    textarea { width: 100%; padding: 10px; font-size: 16px; }
+    button { padding: 10px 20px; margin-top: 10px; font-size: 16px; cursor: pointer; }
+    .confession { background: white; padding: 10px; margin: 10px 0; border-radius: 5px; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+</style>
+</head>
+<body>
+
+<h1>Confession Wall</h1>
+
+<textarea id="confessionText" rows="4" placeholder="Write your confession here..."></textarea>
+<br>
+<button onclick="submitConfession()">Submit</button>
+
+<h2>Confessions:</h2>
+<div id="confessions"></div>
+
+<script>
+    // Load saved confessions from localStorage
+    let confessions = JSON.parse(localStorage.getItem('confessions') || '[]');
+
+    function displayConfessions() {
+        const confDiv = document.getElementById('confessions');
+        confDiv.innerHTML = '';
+        for (let i = confessions.length - 1; i >= 0; i--) { // newest first
+            const div = document.createElement('div');
+            div.className = 'confession';
+            div.textContent = confessions[i];
+            confDiv.appendChild(div);
+        }
+    }
+
+    function submitConfession() {
+        const text = document.getElementById('confessionText').value.trim();
+        if (text) {
+            confessions.push(text);
+            localStorage.setItem('confessions', JSON.stringify(confessions));
+            document.getElementById('confessionText').value = '';
+            displayConfessions();
+        } else {
+            alert("Please write something!");
+        }
+    }
+
+    displayConfessions(); // show existing confessions on load
+</script>
+
+</body>
+</html>
